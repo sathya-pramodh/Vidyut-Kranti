@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "805798065244",
+    "project_id": "real-time-tracking-971b0",
+    "storage_bucket": "real-time-tracking-971b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805798065244:android:c749a095570cbcb2a86299",
+        "android_client_info": {
+          "package_name": "com.example.vidyutkranti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg-7Y2iwFpWBSUMKzywT_G3A8Bm2bVi3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
