@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,7 +11,8 @@ import 'package:vidyutkranti/components/search_card.dart';
 import '../components/app_drawer.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final User? user = FirebaseAuth.instance.currentUser;
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
