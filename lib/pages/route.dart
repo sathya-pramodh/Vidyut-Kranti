@@ -168,7 +168,88 @@ class RoutePageState extends State<RoutePage> {
           Marker(
               icon: BitmapDescriptor.defaultMarker,
               markerId: MarkerId("ID"),
-              position: LatLng(destinationLatitude, destinationLongitude))
+              position: LatLng(destinationLatitude, destinationLongitude)),
+          Marker(
+            markerId: MarkerId('abc'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            position: const LatLng(13.0433, 77.5518),
+            onTap: () =>showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => Dialog(
+        child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+        Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image(image: AssetImage('images/belc.jpg')),
+        ),
+        const SizedBox(height: 15),
+        TextButton(
+        onPressed: () {
+        Navigator.pop(context);
+        },
+        child: const Text('Close'),
+        ),
+        ],
+        ),
+        ),
+        ),
+        ),
+          Marker(
+            markerId: MarkerId('abc'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            position: const LatLng(13.0421, 77.5482),
+            onTap: () =>showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/belc2.jpg')),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Marker(
+            markerId: MarkerId('abc'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            position: const LatLng(12.9769, 77.5140),
+            onTap: () =>showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/nagar1.jpg')),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         },
         LatLngBounds(
           northeast: LatLng(_northEastLatitude, _northEastLongitude),
