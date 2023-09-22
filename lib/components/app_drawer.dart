@@ -84,6 +84,19 @@ class AppDrawer extends StatelessWidget {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => ComplaintPage()));
           },
+        ),
+        MLMenuItem(
+          content: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(width: 15),
+                const Text(""),
+              ],
+            ),
+          ),
+          onClick: () {},
         )
       ],
     );
