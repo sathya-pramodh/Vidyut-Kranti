@@ -173,6 +173,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -180,16 +182,15 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SearchCard(
-                                    searchTitle: 'Enter Bus-Stop',
-                                    inputHintText:
-                                        'Find available buses at a stop',
+                                    searchTitle: 'Enter Route',
+                                    inputHintText: 'Search for Routes',
                                     dropdownController: () {},
                                     optionList: [
-                                      'Stop-1',
-                                      'Stop-2',
-                                      'Stop-3',
-                                      'Stop-4',
-                                      'Stop-5',
+                                      'Route-1',
+                                      'Route-2',
+                                      'Route-3',
+                                      'Route-4',
+                                      'Route-5',
                                     ],
                                   ),
                                 ),
@@ -214,6 +215,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
