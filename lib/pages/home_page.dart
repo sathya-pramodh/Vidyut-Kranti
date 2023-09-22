@@ -1,8 +1,5 @@
-import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
@@ -121,6 +118,18 @@ class _HomePageState extends State<HomePage> {
 
                 //Search Cards
                 children: [
+                  Divider(
+                    color: Color(0xFFF1F6F9),
+                    thickness: 5,
+                    endIndent: 80,
+                    indent: 80,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: _textController,
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
@@ -157,18 +166,6 @@ class _HomePageState extends State<HomePage> {
                     },
                     isCrossBtnShown: true,
                   ),
-                  Divider(
-                    color: Color(0xFFF1F6F9),
-                    thickness: 5,
-                    endIndent: 80,
-                    indent: 80,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -183,15 +180,16 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SearchCard(
-                                    searchTitle: 'Enter Route',
-                                    inputHintText: 'Search by Route...',
+                                    searchTitle: 'Enter Bus-Stop',
+                                    inputHintText:
+                                        'Find available buses at a stop',
                                     dropdownController: () {},
                                     optionList: [
-                                      'Route-1',
-                                      'Route-2',
-                                      'Route-3',
-                                      'Route-4',
-                                      'Route-5',
+                                      'Stop-1',
+                                      'Stop-2',
+                                      'Stop-3',
+                                      'Stop-4',
+                                      'Stop-5',
                                     ],
                                   ),
                                 ),
@@ -206,47 +204,74 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        icon: Icon(Icons.alt_route,
-                        size: 40),
-                      ),
-                  IconButton(
-                    onPressed: () => showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => Dialog(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SearchCard(
-                                searchTitle: 'Enter Bus-Stop',
-                                inputHintText: 'Find available buses at a stop',
-                                dropdownController: () {},
-                                optionList: [
-                                  'Stop-1',
-                                  'Stop-2',
-                                  'Stop-3',
-                                  'Stop-4',
-                                  'Stop-5',
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Close'),
-                            ),
-                          ],
+                        icon: Icon(
+                          Icons.alt_route,
+                          size: 40,
+                          color: Colors.white,
                         ),
                       ),
-                    ),
-                    icon: Icon(Icons.bus_alert_rounded,
-                    size: 40),
+                      IconButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SearchCard(
+                                    searchTitle: 'Enter Bus-Stop',
+                                    inputHintText:
+                                        'Find available buses at a stop',
+                                    dropdownController: () {},
+                                    optionList: [
+                                      'Stop-1',
+                                      'Stop-2',
+                                      'Stop-3',
+                                      'Stop-4',
+                                      'Stop-5',
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Close'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        icon: Icon(
+                          Icons.bus_alert_rounded,
+                          size: 40,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                  ],
+                  const SizedBox(height: 35),
+                  const Column(
+                    children: [
+                      const Text(
+                        "Latest in the Area:",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        "Multiple reports of blockage near Nagarbhavi.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
