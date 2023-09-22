@@ -75,7 +75,8 @@ class _HomePageState extends State<HomePage> {
                   color: Color.fromARGB(255, 204, 245, 184),
                 ),
                 margin: const EdgeInsets.all(0),
-                child: MapView(Set<Polyline>(), Set<Marker>(), null),
+                child: MapView(
+                    Set<Polyline>(),Set<Marker>(),null),
               ),
             ),
           ),
@@ -202,13 +203,44 @@ class _HomePageState extends State<HomePage> {
                                   child: SearchCard(
                                     searchTitle: 'Enter Route',
                                     inputHintText: 'Search for Routes',
-                                    dropdownController: () {},
+                                    dropdownController: (value) => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => Dialog(
+                                        backgroundColor: Colors.white,
+                                        shadowColor: Colors.transparent,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                            ),
+                                            if(value == '401K')...
+                                            [Text('STOPS:', style: TextStyle(fontSize: 20),),
+                                            Text('Ramaiah College', style: TextStyle(fontSize: 16),),
+                                            Text('BEL Circle', style: TextStyle(fontSize: 16),),
+                                            Text('Yeshwanthpur'),
+                                          ],
+                                            if(value == '500E')...
+                                            [Text('STOPS:', style: TextStyle(fontSize: 20),),
+                                              Text('Ramaiah College', style: TextStyle(fontSize: 16),),
+                                              Text('Marathalli', style: TextStyle(fontSize: 16),),
+                                              Text('Silk Board', style: TextStyle(fontSize: 16),),
+                                            ],
+                                            if(value == '378')...
+                                            [Text('STOPS:', style: TextStyle(fontSize: 20),),
+                                              Text('Konantunte', style: TextStyle(fontSize: 16),),
+                                              Text('Banshankari', style: TextStyle(fontSize: 16),),
+                                              Text('Silk Institute', style: TextStyle(fontSize: 16),),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                     optionList: [
-                                      'Route-1',
-                                      'Route-2',
-                                      'Route-3',
-                                      'Route-4',
-                                      'Route-5',
+                                      '401K',
+                                      '500E',
+                                      '378',
                                     ],
                                   ),
                                 ),
@@ -239,13 +271,45 @@ class _HomePageState extends State<HomePage> {
                                     searchTitle: 'Enter Bus-Stop',
                                     inputHintText:
                                         'Find available buses at a stop',
-                                    dropdownController: () {},
+                                    dropdownController: (value) => showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => Dialog(
+                                        backgroundColor: Colors.white,
+                                        shadowColor: Colors.transparent,
+                                        child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                              ),
+                                              if(value=='Ramaiah College')...
+                                              [Text('next bus- 401R', style: TextStyle(fontSize: 20),),
+                                              Text('ETA= 2mins', style: TextStyle(fontSize: 16),),
+                                              Text('other buses:', style: TextStyle(fontSize: 20),),
+                                              Text('500E', style: TextStyle(fontSize: 16),),
+                                              Text('400j', style: TextStyle(fontSize: 16),)],
+                                              if(value=='BEL Circle')...
+                                              [Text('next bus- 401R', style: TextStyle(fontSize: 20),),
+                                                Text('ETA= 10mins', style: TextStyle(fontSize: 16),),
+                                                Text('other buses:', style: TextStyle(fontSize: 20),),
+                                                Text('500', style: TextStyle(fontSize: 16),),
+                                                Text('567', style: TextStyle(fontSize: 16),)],
+                                              if(value=='Naagarbhavi')...
+                                              [Text('next bus- 401R', style: TextStyle(fontSize: 20),),
+                                                Text('ETA= 5mins', style: TextStyle(fontSize: 16),),
+                                                Text('other buses:', style: TextStyle(fontSize: 20),),
+                                                Text('897', style: TextStyle(fontSize: 16),),
+                                                Text('348P', style: TextStyle(fontSize: 16),)],
+                                              ],
+                                        ),
+                                      ),
+                                    ),
                                     optionList: [
-                                      'Stop-1',
-                                      'Stop-2',
-                                      'Stop-3',
-                                      'Stop-4',
-                                      'Stop-5',
+                                      'Ramaiah College',
+                                      'BEL Circle ',
+                                      'Naagarbhavi',
+
                                     ],
                                   ),
                                 ),

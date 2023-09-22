@@ -94,8 +94,8 @@ class SearchCard extends StatelessWidget {
             enabled: true,
             items: optionList,
             onChanged: (value) {
-              print(value);
-              // dropdownController(value);
+              // print(value);
+              dropdownController(value);
             },
             // selectedItem: searchTitle,
 
