@@ -35,6 +35,8 @@ class RoutePageState extends State<RoutePage> {
   late double _startStationLongitude;
   late double _destinationStationLatitude;
   late double _destinationStationLongitude;
+  double _blockLatitude = 12.987;
+  double _blockLongitude = 77.519;
 
   @override
   void initState() {
@@ -99,7 +101,7 @@ class RoutePageState extends State<RoutePage> {
     result = await PolylinePoints().getRouteBetweenCoordinates(
       dotenv.env["MAPS_API_KEY"]!,
       PointLatLng(_startStationLatitude, _startStationLongitude),
-      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
+      PointLatLng(_blockLatitude, _blockLongitude),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach(
@@ -116,10 +118,11 @@ class RoutePageState extends State<RoutePage> {
       width: 5,
     );
     polylines[id2] = polyline2;
+
     result = await PolylinePoints().getRouteBetweenCoordinates(
       dotenv.env["MAPS_API_KEY"]!,
+      PointLatLng(_blockLatitude, _blockLongitude),
       PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach(
@@ -133,9 +136,29 @@ class RoutePageState extends State<RoutePage> {
       polylineId: id3,
       color: Colors.blue,
       points: polylineCoordinates,
-      width: 3,
+      width: 5,
     );
     polylines[id3] = polyline3;
+    result = await PolylinePoints().getRouteBetweenCoordinates(
+      dotenv.env["MAPS_API_KEY"]!,
+      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
+      PointLatLng(destinationLatitude, destinationLongitude),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach(
+        (PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        },
+      );
+    }
+    PolylineId id4 = PolylineId('poly4');
+    Polyline polyline4 = Polyline(
+      polylineId: id4,
+      color: Colors.blue,
+      points: polylineCoordinates,
+      width: 3,
+    );
+    polylines[id4] = polyline4;
     setState(() {
       _polylines = polylines;
       double miny = (startLatitude <= destinationLatitude)
@@ -171,36 +194,38 @@ class RoutePageState extends State<RoutePage> {
               position: LatLng(destinationLatitude, destinationLongitude)),
           Marker(
             markerId: MarkerId('abc'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(13.0433, 77.5518),
-            onTap: () =>showDialog<String>(
+            onTap: () => showDialog<String>(
               context: context,
               builder: (BuildContext context) => Dialog(
-        child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-        Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image(image: AssetImage('images/belc.jpg')),
-        ),
-        const SizedBox(height: 15),
-        TextButton(
-        onPressed: () {
-        Navigator.pop(context);
-        },
-        child: const Text('Close'),
-        ),
-        ],
-        ),
-        ),
-        ),
-        ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/belc.jpg')),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Marker(
             markerId: MarkerId('abc'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(13.0421, 77.5482),
-            onTap: () =>showDialog<String>(
+            onTap: () => showDialog<String>(
               context: context,
               builder: (BuildContext context) => Dialog(
                 child: Column(
@@ -225,9 +250,10 @@ class RoutePageState extends State<RoutePage> {
           ),
           Marker(
             markerId: MarkerId('abc'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(12.9769, 77.5140),
-            onTap: () =>showDialog<String>(
+            onTap: () => showDialog<String>(
               context: context,
               builder: (BuildContext context) => Dialog(
                 child: Column(
@@ -249,6 +275,33 @@ class RoutePageState extends State<RoutePage> {
                 ),
               ),
             ),
+          ),
+          Marker(
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueAzure),
+            markerId: MarkerId("Block1"),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  insetPadding: EdgeInsets.all(50),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Multiple reports of blockage reported."),
+                      const SizedBox(height: 30),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            position: LatLng(_blockLatitude, _blockLongitude),
           ),
         },
         LatLngBounds(
