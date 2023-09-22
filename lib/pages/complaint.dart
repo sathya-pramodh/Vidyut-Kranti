@@ -76,6 +76,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                               'Negligent Driving',
                               'Rude Behavior',
                               'Extra Charging',
+                              'Item Lost',
                               'Other',
                             ],
                           ),
