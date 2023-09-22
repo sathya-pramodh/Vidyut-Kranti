@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multilevel_drawer/multilevel_drawer.dart';
+import 'package:vidyutkranti/pages/complaint.dart';
 
 import 'package:vidyutkranti/pages/login_page.dart';
 
@@ -63,6 +64,27 @@ class AppDrawer extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (context) => Login()));
           },
         ),
+        MLMenuItem(
+          content: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(width: 15),
+                const Text(
+                  "Report Complaint",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          onClick: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => ComplaintPage()));
+          },
+        )
       ],
     );
   }
