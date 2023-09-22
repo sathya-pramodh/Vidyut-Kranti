@@ -166,91 +166,87 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 15,
                   ),
-                  SearchCard(
-                    searchTitle: 'Enter Destination',
-                    inputHintText: 'Search by Destination...',
-                    dropdownController: () {},
-                    optionList: [
-                      'Destination-1',
-                      'Destination-2',
-                      'Destination-3',
-                      'Destination-4',
-                      'Destination-5',
-                    ],
+                  SizedBox(
+                    height: 15,
                   ),
-                  FilledButton.icon(
-                      onPressed: () => showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => Dialog(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SearchCard(
-                                  searchTitle: 'Enter Route',
-                                  inputHintText: 'Search by Route...',
-                                  dropdownController: () {},
-                                  optionList: [
-                                    'Route-1',
-                                    'Route-2',
-                                    'Route-3',
-                                    'Route-4',
-                                    'Route-5',
-                                  ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SearchCard(
+                                    searchTitle: 'Enter Route',
+                                    inputHintText: 'Search by Route...',
+                                    dropdownController: () {},
+                                    optionList: [
+                                      'Route-1',
+                                      'Route-2',
+                                      'Route-3',
+                                      'Route-4',
+                                      'Route-5',
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 15),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
+                                const SizedBox(height: 15),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                   },
-                                child: const Text('Close'),
-                              ),
-                            ],
+                                  child: const Text('Close'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        icon: Icon(Icons.alt_route,
+                        size: 40),
                       ),
-                      icon: Icon(Icons.alt_route),
-                    label: Text('Search Route'),
-                  ),
-                  FilledButton.icon(
+                  IconButton(
                     onPressed: () => showDialog<String>(
                       context: context,
                       builder: (BuildContext context) => Dialog(
-                      child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SearchCard(
-                            searchTitle: 'Enter Bus-Stop',
-                            inputHintText: 'Find available buses at a stop',
-                            dropdownController: () {},
-                            optionList: [
-                              'Stop-1',
-                              'Stop-2',
-                              'Stop-3',
-                              'Stop-4',
-                              'Stop-5',
-                            ],
-                          ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SearchCard(
+                                searchTitle: 'Enter Bus-Stop',
+                                inputHintText: 'Find available buses at a stop',
+                                dropdownController: () {},
+                                optionList: [
+                                  'Stop-1',
+                                  'Stop-2',
+                                  'Stop-3',
+                                  'Stop-4',
+                                  'Stop-5',
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Close'),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 15),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Close'),
-                        ),
-                      ],
-                    ),
                       ),
                     ),
-                    icon: Icon(Icons.bus_alert_rounded),
-                    label: Text('Bus Stop'),
+                    icon: Icon(Icons.bus_alert_rounded,
+                    size: 40),
+                  ),
+                  ],
                   ),
                 ],
               ),
