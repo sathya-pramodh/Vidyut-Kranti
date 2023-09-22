@@ -1,13 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:multilevel_drawer/multilevel_drawer.dart';
 import '../pages/complaint.dart';
 import '../pages/lost_and_found_page.dart';
 import 'package:vidyutkranti/pages/login_page.dart';
 
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+class AppDrawer extends StatefulWidget {
+  AppDrawer({super.key});
 
+  @override
+  State<AppDrawer> createState() => AppDrawerState();
+}
+
+class AppDrawerState extends State<AppDrawer> {
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return MultiLevelDrawer(
@@ -21,51 +27,44 @@ class AppDrawer extends StatelessWidget {
               height: 15,
             ),
             SafeArea(
-              child: Text(
-                "BusTrack",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: GestureDetector(
+                onTap: () {
+                  if (user == null) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  }
+                },
+                child: Column(children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundImage:
+                        AssetImage('images/profile_placeholder.png'),
+                  ),
+                  const SizedBox(height: 15),
+                  (user == null)
+                      ? const Text(
+                          "Guest",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        )
+                      : Text(
+                          user!.email!,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                ]),
               ),
             ),
-            Divider(),
           ],
         ),
       ),
       // itemHeight: 70,
       children: [
-        MLMenuItem(
-          content: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 10,
-                ),
-                const Icon(
-                  Icons.account_circle_outlined,
-                  color: Color(0xFF394867),
-                  size: 25,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  "Login",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          onClick: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Login()));
-          },
-        ),
         MLMenuItem(
           content: Container(
             child: Row(
@@ -128,6 +127,38 @@ class AppDrawer extends StatelessWidget {
           onClick: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => LostAndFoundPage()));
+          },
+        ),
+        MLMenuItem(
+          content: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  Icons.logout,
+                  color: Color(0xFF394867),
+                  size: 25,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "Sign Out",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  overflow: TextOverflow.fade,
+                ),
+              ],
+            ),
+          ),
+          onClick: () async {
+            await FirebaseAuth.instance.signOut();
+            setState(() => user = null);
           },
         ),
         MLMenuItem(

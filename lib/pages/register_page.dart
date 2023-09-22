@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:vidyutkranti/pages/home_page.dart';
-import 'package:vidyutkranti/pages/register_page.dart';
+import 'package:vidyutkranti/pages/login_page.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Register extends StatelessWidget {
+  const Register({super.key});
 
   @override
   Widget build(BuildContext context) {
     // return MaterialApp(
     //   debugShowCheckedModeBanner: false,
-    //   home: LoginPage(),
+    //   home: RegisterPage(),
     // );
-    return LoginPage();
+    return RegisterPage();
   }
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     return firebaseApp;
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
         future: _initializeFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return LoginScreen();
+            return RegisterScreen();
           }
           return const Center(
             child: CircularProgressIndicator(),
@@ -49,23 +49,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   String? _error = "";
-  Future<User?> loginUsingEmailPassword(
+  Future<User?> registerUsingEmailPassword(
       {required String email,
       required String password,
       required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -174,17 +174,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         splashColor: Colors.blueAccent,
                         fillColor: Color.fromARGB(255, 44, 63, 105),
                         onPressed: () async {
-                          User? user = await loginUsingEmailPassword(
+                          User? user = await registerUsingEmailPassword(
                               email: _emailcontroller.text,
                               password: _passwordcontroller.text,
                               context: context);
+                          print(user);
                           if (user != null) {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => HomePage()));
                           }
                         },
                         child: Text(
-                          "Login",
+                          "Register",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -201,11 +202,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         splashColor: Colors.blueAccent,
                         fillColor: Color.fromARGB(255, 44, 63, 105),
                         onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Register()));
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Text(
-                          "Register",
+                          "Login",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
