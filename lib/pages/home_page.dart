@@ -50,26 +50,6 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
-  Future<LatLng> _getClosestBusStation(
-      double latitude, double longitude) async {
-    QuerySnapshot querySnap =
-        await FirebaseFirestore.instance.collection('stations').get();
-    double closestLat = 0;
-    double closestLng = 0;
-    String closestName = "";
-    querySnap.docs.forEach((doc) {
-      double lat = doc.get('location').latitude;
-      double lng = doc.get('location').longitude;
-      if ((latitude - lat).abs() <= (latitude - closestLat).abs() &&
-          (longitude - lng).abs() <= (longitude - closestLng).abs()) {
-        closestLat = lat;
-        closestName = doc.get('station_name');
-        closestLng = lng;
-      }
-    });
-    return LatLng(closestLat, closestLng);
-  }
-
   @override
   Widget build(BuildContext context) {
     // var size = MediaQuery.of(context).size;
@@ -146,19 +126,16 @@ class _HomePageState extends State<HomePage> {
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
                     isLatLngRequired: true,
                     getPlaceDetailWithLatLng: (Prediction prediction) async {
-                      _getClosestBusStation(_curPos.latitude, _curPos.longitude)
-                          .then((startLatLng) {
-                        _getClosestBusStation(double.parse(prediction.lat!),
-                                double.parse(prediction.lng!))
-                            .then((destinationLatLng) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => RoutePage(
-                                  startLatLng.latitude,
-                                  startLatLng.longitude,
-                                  destinationLatLng.latitude,
-                                  destinationLatLng.longitude)));
-                        });
-                      });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => RoutePage(
+                            _curPos.latitude,
+                            _curPos.longitude,
+                            double.parse(prediction.lat!),
+                            double.parse(prediction.lng!),
+                          ),
+                        ),
+                      );
                     },
                     itemClick: (Prediction prediction) {
                       _textController.text = prediction.description!;

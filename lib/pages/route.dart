@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vidyutkranti/components/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -30,27 +31,111 @@ class RoutePageState extends State<RoutePage> {
   late double _southWestLongitude;
   late double _northEastLatitude;
   late double _northEastLongitude;
+  late double _startStationLatitude;
+  late double _startStationLongitude;
+  late double _destinationStationLatitude;
+  late double _destinationStationLongitude;
+
+  @override
+  void initState() {
+    super.initState();
+    _getClosestBusStation(startLatitude, startLongitude).then(
+      (startStation) {
+        _startStationLatitude = startStation.latitude;
+        _startStationLongitude = startStation.longitude;
+        _getClosestBusStation(destinationLatitude, destinationLongitude).then(
+          (destinationStation) {
+            _destinationStationLatitude = destinationStation.latitude;
+            _destinationStationLongitude = destinationStation.longitude;
+            _getPolylines();
+          },
+        );
+      },
+    );
+  }
+
+  Future<LatLng> _getClosestBusStation(
+      double latitude, double longitude) async {
+    QuerySnapshot querySnap =
+        await FirebaseFirestore.instance.collection('stations').get();
+    double closestLat = 0;
+    double closestLng = 0;
+    String closestName = "";
+    querySnap.docs.forEach((doc) {
+      double lat = doc.get('location').latitude;
+      double lng = doc.get('location').longitude;
+      if ((latitude - lat).abs() <= (latitude - closestLat).abs() &&
+          (longitude - lng).abs() <= (longitude - closestLng).abs()) {
+        closestLat = lat;
+        closestName = doc.get('station_name');
+        closestLng = lng;
+      }
+    });
+    return LatLng(closestLat, closestLng);
+  }
+
   _getPolylines() async {
     List<LatLng> polylineCoordinates = [];
     Map<PolylineId, Polyline> polylines = {};
     PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
       dotenv.env["MAPS_API_KEY"]!,
       PointLatLng(startLatitude, startLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
+      PointLatLng(_startStationLatitude, _startStationLongitude),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
-    PolylineId id = PolylineId('poly');
-    Polyline polyline = Polyline(
-      polylineId: id,
-      color: Colors.red,
+    PolylineId id1 = PolylineId('poly1');
+    Polyline polyline1 = Polyline(
+      polylineId: id1,
+      jointType: JointType.mitered,
+      color: Colors.blue,
       points: polylineCoordinates,
       width: 3,
     );
-    polylines[id] = polyline;
+    polylines[id1] = polyline1;
+    result = await PolylinePoints().getRouteBetweenCoordinates(
+      dotenv.env["MAPS_API_KEY"]!,
+      PointLatLng(_startStationLatitude, _startStationLongitude),
+      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach(
+        (PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        },
+      );
+    }
+    PolylineId id2 = PolylineId('poly2');
+    Polyline polyline2 = Polyline(
+      polylineId: id2,
+      color: Colors.blue,
+      points: polylineCoordinates,
+      width: 5,
+    );
+    polylines[id2] = polyline2;
+    result = await PolylinePoints().getRouteBetweenCoordinates(
+      dotenv.env["MAPS_API_KEY"]!,
+      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
+      PointLatLng(destinationLatitude, destinationLongitude),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach(
+        (PointLatLng point) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        },
+      );
+    }
+    PolylineId id3 = PolylineId('poly3');
+    Polyline polyline3 = Polyline(
+      polylineId: id3,
+      color: Colors.blue,
+      points: polylineCoordinates,
+      width: 3,
+    );
+    polylines[id3] = polyline3;
     setState(() {
       _polylines = polylines;
       double miny = (startLatitude <= destinationLatitude)
@@ -70,12 +155,6 @@ class RoutePageState extends State<RoutePage> {
       _northEastLatitude = maxy;
       _northEastLongitude = maxx;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getPolylines();
   }
 
   @override
