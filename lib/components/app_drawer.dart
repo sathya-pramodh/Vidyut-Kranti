@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multilevel_drawer/multilevel_drawer.dart';
+import 'package:vidyutkranti/pages/profile_page.dart';
 import '../pages/complaint.dart';
 import '../pages/lost_and_found_page.dart';
 import 'package:vidyutkranti/pages/login_page.dart';
@@ -32,6 +33,10 @@ class AppDrawerState extends State<AppDrawer> {
                   if (user == null) {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
                     );
                   }
                 },
