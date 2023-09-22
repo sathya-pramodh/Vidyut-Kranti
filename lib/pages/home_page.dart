@@ -178,29 +178,79 @@ class _HomePageState extends State<HomePage> {
                       'Destination-5',
                     ],
                   ),
-                  SearchCard(
-                    searchTitle: 'Enter Route',
-                    inputHintText: 'Search by Route...',
-                    dropdownController: () {},
-                    optionList: [
-                      'Route-1',
-                      'Route-2',
-                      'Route-3',
-                      'Route-4',
-                      'Route-5',
-                    ],
+                  FilledButton.icon(
+                      onPressed: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => Dialog(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SearchCard(
+                                  searchTitle: 'Enter Route',
+                                  inputHintText: 'Search by Route...',
+                                  dropdownController: () {},
+                                  optionList: [
+                                    'Route-1',
+                                    'Route-2',
+                                    'Route-3',
+                                    'Route-4',
+                                    'Route-5',
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  },
+                                child: const Text('Close'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      icon: Icon(Icons.alt_route),
+                    label: Text('Search Route'),
                   ),
-                  SearchCard(
-                    searchTitle: 'Enter Bus-Stop',
-                    inputHintText: 'Find available buses at a stop',
-                    dropdownController: () {},
-                    optionList: [
-                      'Stop-1',
-                      'Stop-2',
-                      'Stop-3',
-                      'Stop-4',
-                      'Stop-5',
-                    ],
+                  FilledButton.icon(
+                    onPressed: () => showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => Dialog(
+                      child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SearchCard(
+                            searchTitle: 'Enter Bus-Stop',
+                            inputHintText: 'Find available buses at a stop',
+                            dropdownController: () {},
+                            optionList: [
+                              'Stop-1',
+                              'Stop-2',
+                              'Stop-3',
+                              'Stop-4',
+                              'Stop-5',
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    ),
+                      ),
+                    ),
+                    icon: Icon(Icons.bus_alert_rounded),
+                    label: Text('Bus Stop'),
                   ),
                 ],
               ),
