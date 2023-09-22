@@ -221,7 +221,7 @@ class RoutePageState extends State<RoutePage> {
             ),
           ),
           Marker(
-            markerId: MarkerId('abc'),
+            markerId: MarkerId('ID1'),
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(13.0421, 77.5482),
@@ -249,7 +249,7 @@ class RoutePageState extends State<RoutePage> {
             ),
           ),
           Marker(
-            markerId: MarkerId('abc'),
+            markerId: MarkerId('ID2'),
             icon:
                 BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(12.9769, 77.5140),
@@ -278,17 +278,29 @@ class RoutePageState extends State<RoutePage> {
           ),
           Marker(
             icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueAzure),
+                BitmapDescriptor.hueYellow),
             markerId: MarkerId("Block1"),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (context) => Dialog(
-                  insetPadding: EdgeInsets.all(50),
+                  insetPadding: EdgeInsets.only(
+                      right: 50, left: 50, top: 150, bottom: 150),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Multiple reports of blockage reported."),
+                      Icon(
+                        Icons.warning,
+                        color: Colors.yellow,
+                        size: 38,
+                      ),
+                      Text(
+                        "Multiple reports of blockage reported.",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 30),
                       TextButton(
                         onPressed: () {

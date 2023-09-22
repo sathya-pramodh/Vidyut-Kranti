@@ -127,13 +127,28 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 15,
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: _textController,
+                    boxDecoration: BoxDecoration(
+                        border: Border.all(
+                      color: Colors.transparent,
+                    )),
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
                     isLatLngRequired: true,
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    inputDecoration: InputDecoration(
+                      // hintText: "Search for destination",
+                      labelText: 'Search destination',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
                     getPlaceDetailWithLatLng: (Prediction prediction) async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -166,6 +181,9 @@ class _HomePageState extends State<HomePage> {
                     },
                     isCrossBtnShown: true,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -173,6 +191,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -180,26 +200,19 @@ class _HomePageState extends State<HomePage> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SearchCard(
-                                    searchTitle: 'Enter Bus-Stop',
-                                    inputHintText:
-                                        'Find available buses at a stop',
+                                    searchTitle: 'Enter Route',
+                                    inputHintText: 'Search for Routes',
                                     dropdownController: () {},
                                     optionList: [
-                                      'Stop-1',
-                                      'Stop-2',
-                                      'Stop-3',
-                                      'Stop-4',
-                                      'Stop-5',
+                                      'Route-1',
+                                      'Route-2',
+                                      'Route-3',
+                                      'Route-4',
+                                      'Route-5',
                                     ],
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Close'),
-                                ),
                               ],
                             ),
                           ),
@@ -214,6 +227,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -235,12 +250,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Close'),
-                                ),
                               ],
                             ),
                           ),
