@@ -170,34 +170,34 @@ class RoutePageState extends State<RoutePage> {
               markerId: MarkerId("ID"),
               position: LatLng(destinationLatitude, destinationLongitude)),
           Marker(
-            markerId: MarkerId('abc'),
+            markerId: MarkerId("image1"),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(13.0433, 77.5518),
             onTap: () =>showDialog<String>(
               context: context,
               builder: (BuildContext context) => Dialog(
-        child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-        Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image(image: AssetImage('images/belc.jpg')),
-        ),
-        const SizedBox(height: 15),
-        TextButton(
-        onPressed: () {
-        Navigator.pop(context);
-        },
-        child: const Text('Close'),
-        ),
-        ],
-        ),
-        ),
-        ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image(image: AssetImage('images/belc.jpg')),
+                    ),
+                    const SizedBox(height: 15),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ),
           Marker(
-            markerId: MarkerId('abc'),
+            markerId: MarkerId("image2"),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(13.0421, 77.5482),
             onTap: () =>showDialog<String>(
@@ -224,7 +224,7 @@ class RoutePageState extends State<RoutePage> {
             ),
           ),
           Marker(
-            markerId: MarkerId('abc'),
+            markerId: MarkerId("image3"),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             position: const LatLng(12.9769, 77.5140),
             onTap: () =>showDialog<String>(
