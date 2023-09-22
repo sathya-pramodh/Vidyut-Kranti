@@ -127,13 +127,22 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 15,
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
+                  
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: _textController,
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
                     isLatLngRequired: true,
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    inputDecoration: InputDecoration(
+                      hintText: "Search for destination",
+                      labelText: 'Search destination',
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
                     getPlaceDetailWithLatLng: (Prediction prediction) async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -166,6 +175,9 @@ class _HomePageState extends State<HomePage> {
                     },
                     isCrossBtnShown: true,
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -195,12 +207,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Close'),
-                                ),
                               ],
                             ),
                           ),
@@ -238,12 +244,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Close'),
-                                ),
                               ],
                             ),
                           ),
