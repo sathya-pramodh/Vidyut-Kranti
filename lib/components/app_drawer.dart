@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multilevel_drawer/multilevel_drawer.dart';
-import 'package:vidyutkranti/pages/complaint.dart';
+import '../pages/complaint.dart';
 
 import 'package:vidyutkranti/pages/login_page.dart';
 
@@ -92,11 +92,14 @@ class AppDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(width: 15),
-                const Text(""),
+                const Text("Lost and Found"),
               ],
             ),
           ),
-          onClick: () {},
+          onClick: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => ComplaintPage()));
+          },
         )
       ],
     );
