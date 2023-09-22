@@ -104,8 +104,6 @@ class AppDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(width: 15),
-                const Text("Lost and Found"),
                 const SizedBox(
                   width: 10,
                 ),
