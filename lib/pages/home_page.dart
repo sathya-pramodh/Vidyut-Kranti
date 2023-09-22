@@ -121,6 +121,15 @@ class _HomePageState extends State<HomePage> {
 
                 //Search Cards
                 children: [
+                  Divider(
+                    color: Color(0xFFF1F6F9),
+                    thickness: 5,
+                    endIndent: 80,
+                    indent: 80,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: _textController,
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
@@ -157,18 +166,6 @@ class _HomePageState extends State<HomePage> {
                     },
                     isCrossBtnShown: true,
                   ),
-                  Divider(
-                    color: Color(0xFFF1F6F9),
-                    thickness: 5,
-                    endIndent: 80,
-                    indent: 80,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -176,6 +173,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -206,47 +205,48 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        icon: Icon(Icons.alt_route,
-                        size: 40),
+                        icon: Icon(Icons.alt_route, size: 40),
                       ),
-                  IconButton(
-                    onPressed: () => showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => Dialog(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SearchCard(
-                                searchTitle: 'Enter Bus-Stop',
-                                inputHintText: 'Find available buses at a stop',
-                                dropdownController: () {},
-                                optionList: [
-                                  'Stop-1',
-                                  'Stop-2',
-                                  'Stop-3',
-                                  'Stop-4',
-                                  'Stop-5',
-                                ],
-                              ),
+                      IconButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SearchCard(
+                                    searchTitle: 'Enter Bus-Stop',
+                                    inputHintText:
+                                        'Find available buses at a stop',
+                                    dropdownController: () {},
+                                    optionList: [
+                                      'Stop-1',
+                                      'Stop-2',
+                                      'Stop-3',
+                                      'Stop-4',
+                                      'Stop-5',
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 15),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Close'),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 15),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Close'),
-                            ),
-                          ],
+                          ),
                         ),
+                        icon: Icon(Icons.bus_alert_rounded, size: 40),
                       ),
-                    ),
-                    icon: Icon(Icons.bus_alert_rounded,
-                    size: 40),
-                  ),
-                  ],
+                    ],
                   ),
                 ],
               ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:multilevel_drawer/multilevel_drawer.dart';
 import 'package:vidyutkranti/pages/complaint.dart';
-
+import '../pages/lost_and_found_page.dart';
 import 'package:vidyutkranti/pages/login_page.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -32,6 +33,7 @@ class AppDrawer extends StatelessWidget {
           ],
         ),
       ),
+      // itemHeight: 70,
       children: [
         MLMenuItem(
           content: Container(
@@ -40,7 +42,7 @@ class AppDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  width: 15,
+                  width: 10,
                 ),
                 const Icon(
                   Icons.account_circle_outlined,
@@ -48,7 +50,7 @@ class AppDrawer extends StatelessWidget {
                   size: 25,
                 ),
                 const SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 const Text(
                   "Login",
@@ -70,12 +72,23 @@ class AppDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(width: 15),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  Icons.report,
+                  color: Color(0xFF394867),
+                  size: 25,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
                 const Text(
-                  "Report Complaint",
+                  "Report \nComplaint",
                   style: TextStyle(
                     fontSize: 20,
                   ),
+                  overflow: TextOverflow.fade,
                 ),
               ],
             ),
@@ -91,9 +104,38 @@ class AppDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(width: 15),
-                const Text(""),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  Icons.search_off_rounded,
+                  color: Color(0xFF394867),
+                  size: 25,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  "Lost and Found",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  overflow: TextOverflow.fade,
+                ),
               ],
+            ),
+          ),
+          onClick: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LostAndFoundPage()));
+          },
+        ),
+        MLMenuItem(
+          content: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [],
             ),
           ),
           onClick: () {},
