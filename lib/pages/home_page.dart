@@ -127,17 +127,23 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 15,
                   ),
-                  
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: _textController,
+                    boxDecoration: BoxDecoration(
+                        border: Border.all(
+                      color: Colors.transparent,
+                    )),
                     googleAPIKey: dotenv.env["PLACES_API_KEY"]!,
                     isLatLngRequired: true,
                     textStyle: TextStyle(
                       color: Colors.white,
                     ),
                     inputDecoration: InputDecoration(
-                      hintText: "Search for destination",
+                      // hintText: "Search for destination",
                       labelText: 'Search destination',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                      ),
                       icon: Icon(
                         Icons.search,
                         color: Colors.white,
