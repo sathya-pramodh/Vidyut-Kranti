@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -56,18 +57,48 @@ class MapViewState extends State<MapView> {
             controller.animateCamera(
                 CameraUpdate.newLatLngBounds(latlngBounds!, 100.0));
           });
-          return GoogleMap(
-            markers: markers,
-            polylines: polylines,
-            zoomControlsEnabled: false,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            mapType: MapType.normal,
-            initialCameraPosition: camPos,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          );
+          return StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('buses').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  Set<Marker> buses = {};
+                  snapshot.data?.docs.forEach(
+                    (doc) {
+                      LatLng bus = LatLng(
+                        doc.get("current_location").latitude,
+                        doc.get("current_location").longitude,
+                      );
+                      buses.add(
+                        Marker(
+                          markerId: MarkerId("${doc.get('bus_no')}"),
+                          icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueAzure,
+                          ),
+                          position: bus,
+                        ),
+                      );
+                    },
+                  );
+                  buses.forEach(
+                    (marker) {
+                      markers.add(marker);
+                    },
+                  );
+                }
+                return GoogleMap(
+                  markers: markers,
+                  polylines: polylines,
+                  zoomControlsEnabled: false,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  mapType: MapType.normal,
+                  initialCameraPosition: camPos,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                );
+              });
         },
       ),
     );
