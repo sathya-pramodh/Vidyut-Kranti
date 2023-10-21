@@ -35,8 +35,11 @@ class RoutePageState extends State<RoutePage> {
   late double _startStationLongitude;
   late double _destinationStationLatitude;
   late double _destinationStationLongitude;
-  double _blockLatitude = 12.987;
-  double _blockLongitude = 77.519;
+  late double _blockLatitude;
+  late double _blockLongitude;
+  late String _blockDesc;
+  List<PolylineResult> _suggestions = [];
+  int _selected = -1;
 
   @override
   void initState() {
@@ -49,7 +52,48 @@ class RoutePageState extends State<RoutePage> {
           (destinationStation) {
             _destinationStationLatitude = destinationStation.latitude;
             _destinationStationLongitude = destinationStation.longitude;
-            _getPolylines();
+            FirebaseFirestore.instance
+                .collection('blocks')
+                .orderBy('time', descending: true)
+                .get()
+                .then(
+              (blocks) {
+                // TODO: Handle all blockages dynamically, currently just handles the most recently added block.
+                _blockLatitude = blocks.docs[0].get('location').latitude;
+                _blockLongitude = blocks.docs[0].get('location').longitude;
+                _blockDesc = blocks.docs[0].get('description');
+              },
+            );
+            PolylinePoints()
+                .getRouteWithAlternatives(
+              request: PolylineRequest(
+                apiKey: dotenv.env["MAPS_API_KEY"]!,
+                origin: PointLatLng(
+                  _startStationLatitude,
+                  _startStationLongitude,
+                ),
+                destination: PointLatLng(
+                  _destinationStationLatitude,
+                  _destinationStationLongitude,
+                ),
+                mode: TravelMode.driving,
+                wayPoints: [],
+                avoidHighways: false,
+                avoidTolls: false,
+                avoidFerries: false,
+                optimizeWaypoints: true,
+                alternatives: false,
+              ),
+            )
+                .then(
+              (results) {
+                setState(
+                  () {
+                    _suggestions = results;
+                  },
+                );
+              },
+            );
           },
         );
       },
@@ -62,14 +106,12 @@ class RoutePageState extends State<RoutePage> {
         await FirebaseFirestore.instance.collection('stations').get();
     double closestLat = 0;
     double closestLng = 0;
-    String closestName = "";
     querySnap.docs.forEach((doc) {
       double lat = doc.get('location').latitude;
       double lng = doc.get('location').longitude;
       if ((latitude - lat).abs() <= (latitude - closestLat).abs() &&
           (longitude - lng).abs() <= (longitude - closestLng).abs()) {
         closestLat = lat;
-        closestName = doc.get('station_name');
         closestLng = lng;
       }
     });
@@ -182,8 +224,33 @@ class RoutePageState extends State<RoutePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_polylines.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+    if (_selected == -1) {
+      List<ListTile> tiles = [];
+      _suggestions.asMap().forEach(
+        (idx, suggestion) {
+          tiles.add(
+            ListTile(
+              title: Text(
+                  "${suggestion.endAddress!} ${(suggestion.durationText == null) ? '' : suggestion.durationText} "),
+              onTap: () {
+                setState(
+                  () async {
+                    _selected = idx;
+                    await _getPolylines();
+                  },
+                );
+              },
+            ),
+          );
+        },
+      );
+      return Scaffold(
+        body: Center(
+          child: ListView(
+            children: tiles,
+          ),
+        ),
+      );
     }
     return MapView(
         Set<Polyline>.of(_polylines.values),
@@ -295,7 +362,7 @@ class RoutePageState extends State<RoutePage> {
                         size: 38,
                       ),
                       Text(
-                        "Multiple reports of blockage reported.",
+                        _blockDesc,
                         style: TextStyle(
                           fontSize: 18,
                         ),
