@@ -230,8 +230,10 @@ class RoutePageState extends State<RoutePage> {
         (idx, suggestion) {
           tiles.add(
             ListTile(
+              horizontalTitleGap: 20,
               title: Text(
-                  "${suggestion.endAddress!} ${(suggestion.durationText == null) ? '' : suggestion.durationText} "),
+                "${suggestion.endAddress!} ${(suggestion.durationText == null) ? '' : suggestion.durationText} ",
+              ),
               onTap: () {
                 setState(
                   () async {
@@ -245,7 +247,20 @@ class RoutePageState extends State<RoutePage> {
         },
       );
       return Scaffold(
-        body: Center(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            'Suggested Routes',
+            style: TextStyle( 
+              // fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        backgroundColor: Color.fromARGB(255, 168, 187, 219),
+        body: Padding(
+          padding: EdgeInsets.all(8),
           child: ListView(
             children: tiles,
           ),
