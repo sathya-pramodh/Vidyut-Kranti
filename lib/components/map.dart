@@ -58,47 +58,71 @@ class MapViewState extends State<MapView> {
                 CameraUpdate.newLatLngBounds(latlngBounds!, 100.0));
           });
           return StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('buses').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Set<Marker> buses = {};
-                  snapshot.data?.docs.forEach(
-                    (doc) {
-                      LatLng bus = LatLng(
-                        doc.get("current_location").latitude,
-                        doc.get("current_location").longitude,
-                      );
-                      buses.add(
-                        Marker(
-                          markerId: MarkerId("${doc.get('bus_no')}"),
-                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueAzure,
-                          ),
-                          position: bus,
+            stream: FirebaseFirestore.instance.collection('buses').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Set<Marker> buses = {};
+                snapshot.data?.docs.forEach(
+                  (doc) {
+                    LatLng bus = LatLng(
+                      doc.get("current_location").latitude,
+                      doc.get("current_location").longitude,
+                    );
+                    buses.add(
+                      Marker(
+                        markerId: MarkerId("${doc.get('bus_no')}"),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueAzure,
                         ),
-                      );
-                    },
-                  );
-                  buses.forEach(
-                    (marker) {
-                      markers.add(marker);
-                    },
-                  );
-                }
-                return GoogleMap(
-                  markers: markers,
-                  polylines: polylines,
-                  zoomControlsEnabled: false,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  mapType: MapType.normal,
-                  initialCameraPosition: camPos,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
+                        position: bus,
+                      ),
+                    );
                   },
                 );
-              });
+                buses.forEach((marker) => markers.add(marker));
+              }
+              return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('stations')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    Set<Marker> stations = {};
+                    snapshot.data?.docs.forEach(
+                      (doc) {
+                        LatLng station = LatLng(
+                          doc.get('location').latitude,
+                          doc.get('location').longitude,
+                        );
+                        stations.add(
+                          Marker(
+                            markerId: MarkerId("${doc.get('station_id')}"),
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueRose,
+                            ),
+                            position: station,
+                          ),
+                        );
+                      },
+                    );
+                    stations.forEach((marker) => markers.add(marker));
+                  }
+                  return GoogleMap(
+                    markers: markers,
+                    polylines: polylines,
+                    zoomControlsEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    mapType: MapType.normal,
+                    initialCameraPosition: camPos,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  );
+                },
+              );
+            },
+          );
         },
       ),
     );
