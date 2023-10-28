@@ -83,6 +83,8 @@ flutter:
     - images/nagar1.jpg
     - images/nagar2.jpg
     - images/profile_placeholder.png
+    - images/bus-stop-marker.png
+    - images/bus-marker.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

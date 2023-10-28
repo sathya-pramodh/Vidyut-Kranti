@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:flutter/services.dart' show rootBundle;
+// import 'dart:ui' as ui;
+// import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -31,10 +34,37 @@ class MapViewState extends State<MapView> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
+  BitmapDescriptor busStopMarkerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor busMarkerIcon = BitmapDescriptor.defaultMarker;
+
   @override
   void initState() {
+    addCustomIcon();
     super.initState();
   }
+
+  void addCustomIcon() async {
+    await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)), "images/bus-stop-marker.png")
+        .then(
+      (icon) {
+        setState(() {
+          busStopMarkerIcon = icon;
+        });
+      },
+    );
+    await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)), "images/bus-marker.png")
+        .then(
+      (icon) {
+        setState(() {
+          busMarkerIcon = icon;
+        });
+      },
+    );
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +101,7 @@ class MapViewState extends State<MapView> {
                     buses.add(
                       Marker(
                         markerId: MarkerId("${doc.get('bus_no')}"),
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                          BitmapDescriptor.hueAzure,
-                        ),
+                        icon: busMarkerIcon,
                         position: bus,
                       ),
                     );
@@ -97,9 +125,7 @@ class MapViewState extends State<MapView> {
                         stations.add(
                           Marker(
                             markerId: MarkerId("${doc.get('station_id')}"),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(
-                              BitmapDescriptor.hueRose,
-                            ),
+                            icon: busStopMarkerIcon,
                             position: station,
                           ),
                         );
