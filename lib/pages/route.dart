@@ -41,8 +41,12 @@ class RoutePageState extends State<RoutePage> {
   List<PolylineResult> _suggestions = [];
   int _selected = -1;
 
+  BitmapDescriptor landmarkMarkerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor roadblockMarkerIcon = BitmapDescriptor.defaultMarker;
+
   @override
   void initState() {
+    addCustomIcon();
     super.initState();
     _getClosestBusStation(startLatitude, startLongitude).then(
       (startStation) {
@@ -96,6 +100,29 @@ class RoutePageState extends State<RoutePage> {
             );
           },
         );
+      },
+    );
+  }
+
+  void addCustomIcon() async {
+    await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)),
+            "images/landmark-marker.png")
+        .then(
+      (icon) {
+        setState(() {
+          landmarkMarkerIcon = icon;
+        });
+      },
+    );
+    await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(50, 50)),
+            "images/road-block-marker.png")
+        .then(
+      (icon) {
+        setState(() {
+          roadblockMarkerIcon = icon;
+        });
       },
     );
   }
@@ -252,7 +279,7 @@ class RoutePageState extends State<RoutePage> {
           elevation: 0,
           title: Text(
             'Suggested Routes',
-            style: TextStyle( 
+            style: TextStyle(
               // fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -270,14 +297,15 @@ class RoutePageState extends State<RoutePage> {
     return MapView(
         Set<Polyline>.of(_polylines.values),
         {
+          //Destination Marker
           Marker(
-              icon: BitmapDescriptor.defaultMarker,
-              markerId: MarkerId("ID"),
-              position: LatLng(destinationLatitude, destinationLongitude)),
+            icon: BitmapDescriptor.defaultMarker,
+            markerId: MarkerId("ID"),
+            position: LatLng(destinationLatitude, destinationLongitude),
+          ),
           Marker(
             markerId: MarkerId('abc'),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon: landmarkMarkerIcon,
             position: const LatLng(13.0433, 77.5518),
             onTap: () => showDialog<String>(
               context: context,
@@ -304,8 +332,7 @@ class RoutePageState extends State<RoutePage> {
           ),
           Marker(
             markerId: MarkerId('ID1'),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon: landmarkMarkerIcon,
             position: const LatLng(13.0421, 77.5482),
             onTap: () => showDialog<String>(
               context: context,
@@ -332,8 +359,7 @@ class RoutePageState extends State<RoutePage> {
           ),
           Marker(
             markerId: MarkerId('ID2'),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+            icon: landmarkMarkerIcon,
             position: const LatLng(12.9769, 77.5140),
             onTap: () => showDialog<String>(
               context: context,
@@ -359,8 +385,7 @@ class RoutePageState extends State<RoutePage> {
             ),
           ),
           Marker(
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueYellow),
+            icon: roadblockMarkerIcon,
             markerId: MarkerId("Block1"),
             onTap: () {
               showDialog(
