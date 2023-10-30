@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vidyutkranti/components/map.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,7 @@ class RoutePageState extends State<RoutePage> {
   late String _blockDesc;
   List<PolylineResult> _suggestions = [];
   int _selected = -1;
+  List<Marker> _markers = [];
 
   BitmapDescriptor landmarkMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor roadblockMarkerIcon = BitmapDescriptor.defaultMarker;
@@ -68,32 +71,192 @@ class RoutePageState extends State<RoutePage> {
                 _blockDesc = blocks.docs[0].get('description');
               },
             );
-            PolylinePoints()
-                .getRouteWithAlternatives(
-              request: PolylineRequest(
-                apiKey: dotenv.env["MAPS_API_KEY"]!,
-                origin: PointLatLng(
-                  _startStationLatitude,
-                  _startStationLongitude,
-                ),
-                destination: PointLatLng(
-                  _destinationStationLatitude,
-                  _destinationStationLongitude,
-                ),
-                mode: TravelMode.driving,
-                wayPoints: [],
-                avoidHighways: false,
-                avoidTolls: false,
-                avoidFerries: false,
-                optimizeWaypoints: true,
-                alternatives: false,
-              ),
-            )
-                .then(
-              (results) {
-                setState(
-                  () {
-                    _suggestions = results;
+            FirebaseFirestore.instance.collection('stations').get().then(
+              (stations) {
+                List<PolylineWayPoint> _waypoints = [];
+                stations.docs.forEach(
+                  (station) {
+                    double lat = station.get('location').latitude;
+                    double lng = station.get('location').longitude;
+                    bool check = (lat == _startStationLatitude &&
+                            lng == _startStationLongitude) ||
+                        (lat == _destinationStationLatitude &&
+                            lng == _destinationStationLongitude);
+                    if (check) {
+                      _waypoints.add(
+                        PolylineWayPoint(
+                            location: "${lat},${lng}", stopOver: true),
+                      );
+                    }
+                  },
+                );
+                PolylinePoints()
+                    .getRouteWithAlternatives(
+                  request: PolylineRequest(
+                    apiKey: dotenv.env["MAPS_API_KEY"]!,
+                    origin: PointLatLng(
+                      startLatitude,
+                      startLongitude,
+                    ),
+                    destination: PointLatLng(
+                      destinationLatitude,
+                      destinationLongitude,
+                    ),
+                    mode: TravelMode.driving,
+                    wayPoints: _waypoints,
+                    avoidHighways: false,
+                    avoidTolls: false,
+                    avoidFerries: false,
+                    optimizeWaypoints: false,
+                    alternatives: true,
+                  ),
+                )
+                    .then(
+                  (results) {
+                    setState(
+                      () {
+                        _suggestions = results;
+                        _markers.addAll(
+                          [
+                            Marker(
+                              icon: BitmapDescriptor.defaultMarker,
+                              markerId: MarkerId("ID"),
+                              position: LatLng(
+                                  destinationLatitude, destinationLongitude),
+                            ),
+                            Marker(
+                              markerId: MarkerId('abc'),
+                              icon: landmarkMarkerIcon,
+                              position: const LatLng(13.0433, 77.5518),
+                              onTap: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image(
+                                            image:
+                                                AssetImage('images/belc.jpg')),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Close'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Marker(
+                              markerId: MarkerId('ID1'),
+                              icon: landmarkMarkerIcon,
+                              position: const LatLng(13.0421, 77.5482),
+                              onTap: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image(
+                                            image:
+                                                AssetImage('images/belc2.jpg')),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Close'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Marker(
+                              markerId: MarkerId('ID2'),
+                              icon: landmarkMarkerIcon,
+                              position: const LatLng(12.9769, 77.5140),
+                              onTap: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image(
+                                            image: AssetImage(
+                                                'images/nagar1.jpg')),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Close'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Marker(
+                              icon: roadblockMarkerIcon,
+                              markerId: MarkerId("Block1"),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                    insetPadding: EdgeInsets.only(
+                                        right: 50,
+                                        left: 50,
+                                        top: 150,
+                                        bottom: 150),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: Colors.yellow,
+                                          size: 38,
+                                        ),
+                                        Text(
+                                          _blockDesc,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 30),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text('Close'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              position: LatLng(_blockLatitude, _blockLongitude),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 );
               },
@@ -133,101 +296,47 @@ class RoutePageState extends State<RoutePage> {
         await FirebaseFirestore.instance.collection('stations').get();
     double closestLat = 0;
     double closestLng = 0;
-    querySnap.docs.forEach((doc) {
-      double lat = doc.get('location').latitude;
-      double lng = doc.get('location').longitude;
-      if ((latitude - lat).abs() <= (latitude - closestLat).abs() &&
-          (longitude - lng).abs() <= (longitude - closestLng).abs()) {
-        closestLat = lat;
-        closestLng = lng;
-      }
-    });
+    double minDist = 1e10;
+    querySnap.docs.forEach(
+      (doc) {
+        double lat = doc.get('location').latitude;
+        double lng = doc.get('location').longitude;
+        double p = 0.017453292519943295;
+        var c = cos;
+        double a = 0.5 -
+            c((lat - latitude).abs() * p) / 2 +
+            c(latitude * p) *
+                c(lat * p) *
+                (1 - c((lng - longitude).abs() * p)) /
+                2;
+        double dist = 12742 * asin(sqrt(a)); // Distance in km.
+        if (dist <= minDist) {
+          minDist = dist;
+          closestLat = lat;
+          closestLng = lng;
+        }
+      },
+    );
     return LatLng(closestLat, closestLng);
   }
 
-  _getPolylines() async {
+  _getPolylines() {
     List<LatLng> polylineCoordinates = [];
     Map<PolylineId, Polyline> polylines = {};
-    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-      dotenv.env["MAPS_API_KEY"]!,
-      PointLatLng(startLatitude, startLongitude),
-      PointLatLng(_startStationLatitude, _startStationLongitude),
+    _suggestions[_selected].points.asMap().forEach(
+      (idx, point) {
+        polylineCoordinates.add(
+          LatLng(point.latitude, point.longitude),
+        );
+        PolylineId id = PolylineId('poly${idx}');
+        Polyline polyline = Polyline(
+            polylineId: id,
+            color: Colors.blue,
+            points: polylineCoordinates,
+            width: 3);
+        polylines[id] = polyline;
+      },
     );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    }
-    PolylineId id1 = PolylineId('poly1');
-    Polyline polyline1 = Polyline(
-      polylineId: id1,
-      jointType: JointType.mitered,
-      color: Colors.blue,
-      points: polylineCoordinates,
-      width: 3,
-    );
-    polylines[id1] = polyline1;
-    result = await PolylinePoints().getRouteBetweenCoordinates(
-      dotenv.env["MAPS_API_KEY"]!,
-      PointLatLng(_startStationLatitude, _startStationLongitude),
-      PointLatLng(_blockLatitude, _blockLongitude),
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        },
-      );
-    }
-    PolylineId id2 = PolylineId('poly2');
-    Polyline polyline2 = Polyline(
-      polylineId: id2,
-      color: Colors.blue,
-      points: polylineCoordinates,
-      width: 5,
-    );
-    polylines[id2] = polyline2;
-
-    result = await PolylinePoints().getRouteBetweenCoordinates(
-      dotenv.env["MAPS_API_KEY"]!,
-      PointLatLng(_blockLatitude, _blockLongitude),
-      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        },
-      );
-    }
-    PolylineId id3 = PolylineId('poly3');
-    Polyline polyline3 = Polyline(
-      polylineId: id3,
-      color: Colors.blue,
-      points: polylineCoordinates,
-      width: 5,
-    );
-    polylines[id3] = polyline3;
-    result = await PolylinePoints().getRouteBetweenCoordinates(
-      dotenv.env["MAPS_API_KEY"]!,
-      PointLatLng(_destinationStationLatitude, _destinationStationLongitude),
-      PointLatLng(destinationLatitude, destinationLongitude),
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        },
-      );
-    }
-    PolylineId id4 = PolylineId('poly4');
-    Polyline polyline4 = Polyline(
-      polylineId: id4,
-      color: Colors.blue,
-      points: polylineCoordinates,
-      width: 3,
-    );
-    polylines[id4] = polyline4;
     setState(() {
       _polylines = polylines;
       double miny = (startLatitude <= destinationLatitude)
@@ -251,181 +360,67 @@ class RoutePageState extends State<RoutePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_selected == -1) {
-      List<ListTile> tiles = [];
-      _suggestions.asMap().forEach(
-        (idx, suggestion) {
-          tiles.add(
-            ListTile(
-              horizontalTitleGap: 20,
-              title: Text(
-                "${suggestion.endAddress!} ${(suggestion.durationText == null) ? '' : suggestion.durationText} ",
-              ),
-              onTap: () {
-                setState(
-                  () async {
-                    _selected = idx;
-                    await _getPolylines();
-                  },
-                );
-              },
-            ),
-          );
-        },
-      );
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(
-            'Suggested Routes',
-            style: TextStyle(
-              // fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 168, 187, 219),
-        body: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView(
-            children: tiles,
-          ),
-        ),
-      );
-    }
-    return MapView(
-        Set<Polyline>.of(_polylines.values),
-        {
-          //Destination Marker
-          Marker(
-            icon: BitmapDescriptor.defaultMarker,
-            markerId: MarkerId("ID"),
-            position: LatLng(destinationLatitude, destinationLongitude),
-          ),
-          Marker(
-            markerId: MarkerId('abc'),
-            icon: landmarkMarkerIcon,
-            position: const LatLng(13.0433, 77.5518),
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => Dialog(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image(image: AssetImage('images/belc.jpg')),
-                    ),
-                    const SizedBox(height: 15),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Close'),
-                    ),
-                  ],
-                ),
+    List<ListTile> tiles = [];
+    _suggestions.asMap().forEach(
+      (idx, suggestion) {
+        tiles.add(
+          ListTile(
+            horizontalTitleGap: 20,
+            title: Text(
+              "${suggestion.endAddress!} ${(suggestion.durationText == null) ? '' : suggestion.durationText} ",
+              style: TextStyle(
+                // fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-          ),
-          Marker(
-            markerId: MarkerId('ID1'),
-            icon: landmarkMarkerIcon,
-            position: const LatLng(13.0421, 77.5482),
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => Dialog(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image(image: AssetImage('images/belc2.jpg')),
-                    ),
-                    const SizedBox(height: 15),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Close'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Marker(
-            markerId: MarkerId('ID2'),
-            icon: landmarkMarkerIcon,
-            position: const LatLng(12.9769, 77.5140),
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => Dialog(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image(image: AssetImage('images/nagar1.jpg')),
-                    ),
-                    const SizedBox(height: 15),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Close'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Marker(
-            icon: roadblockMarkerIcon,
-            markerId: MarkerId("Block1"),
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                  insetPadding: EdgeInsets.only(
-                      right: 50, left: 50, top: 150, bottom: 150),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.warning,
-                        color: Colors.yellow,
-                        size: 38,
-                      ),
-                      Text(
-                        _blockDesc,
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 30),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Close'),
-                      ),
-                    ],
-                  ),
-                ),
+              setState(
+                () {
+                  _selected = idx;
+                  _getPolylines();
+                },
               );
             },
-            position: LatLng(_blockLatitude, _blockLongitude),
           ),
-        },
-        LatLngBounds(
-          northeast: LatLng(_northEastLatitude, _northEastLongitude),
-          southwest: LatLng(_southWestLatitude, _southWestLongitude),
-        ));
+        );
+      },
+    );
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: (_selected == -1)
+            ? Text(
+                'Suggested Routes',
+                style: TextStyle(
+                  // fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              )
+            : Text(
+                'Route',
+                style: TextStyle(
+                  // fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+      ),
+      backgroundColor: Color.fromARGB(255, 168, 187, 219),
+      body: (_selected == -1)
+          ? Padding(
+              padding: EdgeInsets.all(8),
+              child: ListView(
+                children: tiles,
+              ),
+            )
+          : MapView(
+              Set<Polyline>.of(_polylines.values),
+              Set<Marker>.of(_markers),
+              LatLngBounds(
+                northeast: LatLng(_northEastLatitude, _northEastLongitude),
+                southwest: LatLng(_southWestLatitude, _southWestLongitude),
+              ),
+            ),
+    );
   }
 }
